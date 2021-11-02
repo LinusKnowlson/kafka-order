@@ -7,15 +7,18 @@ public class OrdersValue {
     private Long id;
     private String supplier;
     private String product;
-    private String quantity;
+    private int quantity;
+    private Long customerId;
+    private Long productId;
 
-    public OrdersValue() {
-    }
+    public OrdersValue() {}
 
-    public OrdersValue(String supplier, String product, String quantity) {
-        this.supplier = supplier;
+    public OrdersValue(String supplier, String product, int quantity,Long customerId, Long productId) {
+    	this.supplier = supplier;
         this.product = product;
         this.quantity = quantity;
+        this.customerId = customerId;
+        this.productId = productId;
     }
 
     public Long getId() {
@@ -42,12 +45,28 @@ public class OrdersValue {
         this.product = product;
     }
 
-    public String getQuantity() {
+    public int getQuantity() {
         return quantity;
     }
 
-    public void setQuantity(String quantity) {
+    public void setQuantity(int quantity) {
         this.quantity = quantity;
+    }
+    
+    public Long getCustomerId() {
+        return customerId;
+    }
+
+    public void setCustomerId(Long customerId) {
+        this.customerId = customerId;
+    }
+    
+    public Long getProductId() {
+        return productId;
+    }
+
+    public void setProductId(Long productId) {
+        this.productId = productId;
     }
 
     @Override
@@ -57,6 +76,8 @@ public class OrdersValue {
                 ", supplier='" + supplier + '\'' +
                 ", product='" + product + '\'' +
                 ", quantity='" + quantity + '\'' +
+                ", customer='" + customerId + '\'' +
+                ", productId='" + productId + '\'' +
                 '}';
     }
 }

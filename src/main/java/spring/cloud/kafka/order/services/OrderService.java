@@ -43,12 +43,6 @@ public class OrderService implements OrderServiceIF
         return CollectionModel.of(orders,
                 linkTo(methodOn(OrderService.class).all()).withSelfRel());
     }
-    //create a new order without communicating with other services
-    @Override
-    public Orders createOrder(Orders createOrders) {
-        // TODO Auto-generated method stub
-        return orderRepository.save(createOrders);
-    }
     //validate customer object
     @Override
 	public boolean LookUpCustomer(Object customer) {

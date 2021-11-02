@@ -24,5 +24,4 @@ public class OrderApplication {
 	public Consumer<Orders> consume() {
 		return input -> log.info(input.toString());
 	}
-
 }

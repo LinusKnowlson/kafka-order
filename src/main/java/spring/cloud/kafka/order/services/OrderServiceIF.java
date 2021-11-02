@@ -8,7 +8,6 @@ import org.springframework.hateoas.EntityModel;
 public interface OrderServiceIF
 {
     public abstract CollectionModel<EntityModel<Orders>> all();
-    public abstract Orders createOrder(Orders createOrders);
     public abstract boolean LookUpCustomer(Object customer);
     public abstract boolean LookUpProduct(Object product);
     public abstract String createOrders(Orders createOrders, Object customer, Object contact, Object product, String productName, int Quantity);

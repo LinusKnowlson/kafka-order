@@ -1,8 +1,15 @@
 package spring.cloud.kafka.order.controllers;
 
+import java.util.Random;
+
 import javax.validation.Valid;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.web.client.RestTemplateBuilder;
+import org.springframework.cloud.stream.function.StreamBridge;
 import org.springframework.context.annotation.Bean;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
@@ -16,6 +23,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 
+import spring.cloud.kafka.order.OrderApplication;
 import spring.cloud.kafka.order.models.*;
 import spring.cloud.kafka.order.services.OrderService;
 
@@ -24,6 +32,12 @@ public class OrderController {
 
     @Autowired
     OrderService orderService;
+    
+    private static final Logger log = LoggerFactory.getLogger(OrderApplication.class);
+    
+    private String urlCustomer = "http://localhost:8080/customers/";
+	private String urlProduct = "http://localhost:8081/products/";
+    
     //build rest template for getting HTTP requests
     @Bean
     public RestTemplate restTemplate(RestTemplateBuilder builder) {
@@ -35,15 +49,9 @@ public class OrderController {
     CollectionModel<EntityModel<Orders>> all() {
         return orderService.all();
     }
-    
-//    @PostMapping("/orders")
-//    ResponseEntity<String> createOrder(@Valid @RequestBody Orders createOrders) {
-//    	orderService.createOrder(createOrders);
-//		return ResponseEntity.ok(createOrders.toString());
-//    }
 
     //create new order with validation
-    @PostMapping("/orders/{customerId,contactId,productId,ProductName,OrderQuantity}")
+    @PostMapping("/orders/{customerId,contactId,productId,ProductName,OrderQuantity}/orderDetails")
     ResponseEntity<String> createOrders(@Valid @RequestBody Orders createOrders, Long customerId, Long contactId, Long productId, String productName, int orderQuantity, RestTemplate restTemplate) 
     {
     	String urlCustomer = "http://localhost:8081/customers/" + customerId;
@@ -56,7 +64,7 @@ public class OrderController {
     	return ResponseEntity.ok(response);
     }
     //Look up customer basic info by order
-    @GetMapping("/orders/customers/{customerId}")
+    @GetMapping("/orders/{customerId}/customers")
     ResponseEntity<String> LookUpCustomer(@Valid @RequestBody Long customerId, RestTemplate restTemplate) {
 		// TODO Auto-generated method stub
 		String url = "http://localhost:8081/customers/" + customerId;
@@ -69,7 +77,7 @@ public class OrderController {
 		return ResponseEntity.ok("customer id not valid");
 	}
     //Look up product basic info by order
-    @GetMapping("/orders/products/{productId}")
+    @GetMapping("/orders/{productId}/products")
     ResponseEntity<String> LookUpProduct(@Valid @RequestBody Long productId, RestTemplate restTemplate) {
 		// TODO Auto-generated method stub
 		String url = "http://localhost:8080/products/" + productId;
@@ -79,7 +87,7 @@ public class OrderController {
 		{
 			return ResponseEntity.ok(product.toString());
 		}
-		return ResponseEntity.ok("cannot find customer with id " + productId);
+		return ResponseEntity.ok("cannot find product with id " + productId);
 	}
 
     //find order by id
@@ -99,4 +107,22 @@ public class OrderController {
     void deleteOrder(@PathVariable Long id) {
         orderService.deleteOrder(id);
     }
+    
+    //get the information from random customer and product
+    @Bean
+	public CommandLineRunner run(RestTemplate restTemplate, StreamBridge streamBridge) throws Exception {
+		return args -> {
+			//randomly choose a customer and product id
+			Random rand = new Random();
+			int customerNum = rand.nextInt(3) + 1;
+			int productNum = rand.nextInt(3) + 1;
+			urlCustomer = urlCustomer + customerNum;
+			urlProduct = urlProduct + productNum;
+			//request for customer and product info and log it out on console
+			Object customer = restTemplate.getForObject(urlCustomer, Object.class);
+			Object product = restTemplate.getForObject(urlProduct, Object.class);
+			log.info(customer.toString());
+			log.info(product.toString());
+		};
+	}
 }

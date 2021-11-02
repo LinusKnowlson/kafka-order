@@ -16,9 +16,11 @@ public class LoadDatabase {
     @Bean
     CommandLineRunner initDB(OrderRepository orderRepository) {
         return args -> {
-            log.info("Loading... " + orderRepository.save(new Orders("ABC Supplier", "microwave", 10)));
-            log.info("Loading... " + orderRepository.save(new Orders("FedEx", "microprocessor", 9)));
-            log.info("Loading... " + orderRepository.save(new Orders("ACME Delivery", "dishwasher", 7)));
+            log.info("Loading... " + orderRepository.save(new Orders("ABC Supplier", "microwave", 4, Long.valueOf(1),Long.valueOf(1))));
+            log.info("Loading... " + orderRepository.save(new Orders("FedEx", "microprocessor", 3,Long.valueOf(1),Long.valueOf(2))));
+            log.info("Loading... " + orderRepository.save(new Orders("ACME Delivery", "dishwasher", 7,Long.valueOf(2),Long.valueOf(3))));
+            log.info("Loading... " + orderRepository.save(new Orders("DEF Supplier", "microwave", 5, Long.valueOf(2),Long.valueOf(1))));
+            log.info("Loading... " + orderRepository.save(new Orders("SSS Delivery", "dishwasher", 2,Long.valueOf(1),Long.valueOf(3))));
         };
     }
 }

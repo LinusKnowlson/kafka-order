@@ -12,14 +12,18 @@ public class Orders {
     private String supplier;
     private String product;
     private int quantity;
+    private Long customerId;
+    private Long productId;
 
     public Orders() {
     }
 
-    public Orders(String supplier, String product, int quantity) {
+    public Orders(String supplier, String product, int quantity,Long customerId, Long productId) {
         this.supplier = supplier;
         this.product = product;
         this.quantity = quantity;
+        this.customerId = customerId;
+        this.productId = productId;
     }
 
     public Long getId() {
@@ -53,6 +57,22 @@ public class Orders {
     public void setQuantity(int quantity) {
         this.quantity = quantity;
     }
+    
+    public Long getCustomerId() {
+        return customerId;
+    }
+
+    public void setCustomerId(Long customerId) {
+        this.customerId = customerId;
+    }
+    
+    public Long getProductId() {
+        return productId;
+    }
+
+    public void setProductId(Long productId) {
+        this.productId = productId;
+    }
 
     @Override
     public String toString() {
@@ -61,6 +81,8 @@ public class Orders {
                 ", supplier='" + supplier + '\'' +
                 ", product='" + product + '\'' +
                 ", quantity='" + quantity + '\'' +
+                ", customer='" + customerId + '\'' +
+                ", productId='" + productId + '\'' +
                 '}';
     }
 
@@ -75,11 +97,13 @@ public class Orders {
         return Objects.equals(this.id, Orders.id)
                 && Objects.equals(this.supplier, Orders.supplier)
                 && Objects.equals(this.product, Orders.product)
-                && Objects.equals(this.quantity, Orders.quantity);
+                && Objects.equals(this.quantity, Orders.quantity)
+                && Objects.equals(this.customerId, Orders.customerId)
+                && Objects.equals(this.productId, Orders.productId);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(this.id, this.supplier, this.product, this.quantity);
+        return Objects.hash(this.id, this.supplier, this.product, this.quantity, this.customerId, this.productId);
     }
 }
